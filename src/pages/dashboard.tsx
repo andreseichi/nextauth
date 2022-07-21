@@ -10,11 +10,13 @@ export default function Dashboard() {
     api.get('/me').then((response) => console.log(response));
   }, []);
 
-  const { user } = useContext(AuthContext);
+  const { user, signOut } = useContext(AuthContext);
 
   return (
     <>
       <h1>Dashboard: {user?.email}</h1>
+
+      <button onClick={signOut}>Deslogar</button>
 
       <Can permissions={['metrics.list']} roles={['editor', 'administrator']}>
         <div>Métricas</div>
@@ -26,8 +28,6 @@ export default function Dashboard() {
 export const getServerSideProps = withSSRAuth(async (ctx) => {
   const apiClient = setupAPIClient(ctx);
   const response = await apiClient('/me');
-
-  console.log(response.data);
 
   return {
     props: {},
